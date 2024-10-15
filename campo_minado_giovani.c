@@ -228,9 +228,9 @@ int main(void){
     campoJogo = alocaMatriz(tamCampo);
     coordenadasResposta = alocaMatrizCoordenadasResposta(tamCampo, &qtdBombas);
 
-    inicioJogo(campoJogo, campoResposta, coordenadasResposta, tamCampo, qtdBombas);
+    inicioJogo(campoJogo, campoResposta, coordenadasResposta, tamCampo, qtdBombas); // método que inicia o jogo
 
-    // liberando todos os espaços alocados
+    // liberando todos os espaços alocados das matrizes e dos vetores
     for (int i = tamCampo; i < tamCampo; i++){
         free(campoJogo[i]);
         free(campoResposta[i]);
