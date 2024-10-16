@@ -46,7 +46,7 @@ int **alocaMatrizCoordenadasResposta(int tam, int *qtdBombas){ // aloca uma matr
 }
 
 void imprimeMatriz(int** mat, int tam, int flagModificadorChar){ // flagModificadorChar: indica se a impressão vai usar %c ou %d
-    if(flagModificadorChar){
+    if(flagModificadorChar){                                    // 1 = %c, 0 = %d
         for(int i = 0; i < tam; i++){
             for(int j = 0; j < tam; j++){
                 printf("%c ", mat[i][j]);
@@ -81,7 +81,7 @@ int defineTamCampo(char *dificuldade){
 
 void gerarPosicaoBombas(int **mat, int qtdBombas, int tam){
     int x, y;
-    for (int i = 0; i < qtdBombas; i++){ // gera a posição aleatória da bomba
+    for (int i = 0; i < qtdBombas; i++){ // gera coordenadas aleatórias para as bombas
         x = rand() % tam;
         y = rand() % tam;
         mat[i][0] = x;
@@ -207,8 +207,8 @@ void inicioJogo(int** campoJogo, int** campoResposta, int** coordenadasResposta,
     }
 
     if(!bombaExplodiu){
-        printf("parabéns, vc eh fera\n");
-        imprimeMatriz(campoResposta, tamCampo, 1);
+        printf("parabens, vc eh fera\n");
+        imprimeMatriz(campoResposta, tamCampo, 0);
     }else{
         printf("game over\n");
         imprimeMatriz(campoResposta, tamCampo, 0);
