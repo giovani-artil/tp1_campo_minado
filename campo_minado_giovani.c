@@ -11,7 +11,7 @@ int **alocaMatriz(int tam){
     int **mat = (int **)malloc(tam * sizeof(int *));
 
     for (int i = 0; i < tam; i++){
-        mat[i] = (int *)calloc(tam * tam, sizeof(int));
+        mat[i] = (int *)calloc(tam * tam, sizeof(int)); // inicializa as matrizes do jogo com 0's
     }
 
     return mat;
