@@ -17,7 +17,7 @@ int **alocaMatriz(int tam){
     return mat;
 }
 
-int **alocaMatrizCoordenadasResposta(int tam, int *qtdBombas){ // aloca uma matriz com N linhas e 2 colunas, em que cada linha representa a coordenada de uma bomba
+int **alocaMatrizCoordenadasResposta(int tam, int *qtdBombas){ // aloca uma matriz com N linhas, onde N é a quantidade de bombas, e 2 colunas, em que cada linha representa a coordenada de uma bomba
     int **mat;
 
     if (tam == F){
