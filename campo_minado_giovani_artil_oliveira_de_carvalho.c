@@ -45,20 +45,30 @@ int **alocaMatrizCoordenadasResposta(int tam, int *qtdBombas){ // aloca uma matr
     return mat;
 }
 
-void imprimeMatriz(int** mat, int tam, int flagModificadorChar){ // flagModificadorChar: indica se a impressão vai usar %c ou %d
-    if(flagModificadorChar){                                    // 1 = %c, 0 = %d
-        for(int i = 0; i < tam; i++){
-            for(int j = 0; j < tam; j++){
-                printf("%c ", mat[i][j]);
+void imprimeMatriz(int **mat, int tam, int flagModificadorChar){ // flagModificadorChar: indica se a impressão vai usar %c ou %d // 1 = %c, 0 = %d
+    printf("  ");
+    for (int i = 1; i <= tam; i++){
+        printf(" %2d", i);
+    }
+    printf("\n");
+
+    if (flagModificadorChar){
+        for (int i = 0; i < tam; i++){
+            printf("%2d ", i + 1);
+
+            for (int j = 0; j < tam; j++){
+                printf(" %c ", mat[i][j]);
             }
             printf("\n");
         }
-    }else{
-        for(int i = 0; i < tam; i++){
-            for(int j = 0; j < tam; j++){
+    }
+    else{
+        for (int i = 0; i < tam; i++){
+            printf("%2d ", i + 1);
+            for (int j = 0; j < tam; j++){
                 printf("%2d ", mat[i][j]);
             }
-        printf("\n");
+            printf("\n");
         }
     }
 }
@@ -79,13 +89,31 @@ int defineTamCampo(char *dificuldade){
     return tamCampo;
 }
 
-void gerarPosicaoBombas(int **mat, int qtdBombas, int tam){
-    int x, y;
-    for (int i = 0; i < qtdBombas; i++){ // gera coordenadas aleatórias para as bombas
+void gerarPosicaoBombas(int **mat, int qtdBombas, int tam){ // gera coordenadas aleatórias para as bombas
+    int x, y, contBombasGeradas = 0, flagCoordenadaRepetida = 0;
+
+    while (contBombasGeradas < qtdBombas){
         x = rand() % tam;
         y = rand() % tam;
-        mat[i][0] = x;
-        mat[i][1] = y;
+
+        if (!contBombasGeradas){ // verificação se a coordenada gerada é igual à alguma coordenada já armazenada
+            mat[contBombasGeradas][0] = x;
+            mat[contBombasGeradas][1] = y;
+            contBombasGeradas++;
+        }
+        else{
+            for (int i = 0; i < contBombasGeradas; i++){
+                if (mat[i][0] == x && mat[i][1] == y){
+                    flagCoordenadaRepetida = 1;
+                }
+            }
+
+            if (!flagCoordenadaRepetida){
+                mat[contBombasGeradas][0] = x;
+                mat[contBombasGeradas][1] = y;
+                contBombasGeradas++;
+            }
+        }
     }
 }
 
@@ -165,54 +193,70 @@ void preencheMatrizResposta(int **mat, int **coordResp, int tam, int qtdBomba){
     }
 }
 
-int verificaJogada(int** jogo, int** resposta, int x, int y){ 
+int verificaJogada(int **jogo, int **resposta, int x, int y, int tam){
     int resultado;
 
-    if(jogo[x][y] != resposta[x][y]){
-        if(resposta[x][y] != -1){
-            jogo[x][y] = resposta[x][y]+48; // transforma o número de bombas em código ASCII
-            resultado = 1; // jogador não achou uma bomba, jogo continua
+    if((0 <= x && x < tam) && (0 <= y && y < tam)){ // verifica se as coordenadas estão dentro do limite do tamanho
+        if (jogo[x][y] != resposta[x][y]+48){ // verifica se é uma jogada repetida
+            if (resposta[x][y] != -1){
+                jogo[x][y] = resposta[x][y] + 48; // transforma o número de bombas em código ASCII
+                resultado = 1;                    // jogador não achou uma bomba, jogo continua
+            }
+            else{
+                resultado = 0; // jogador achou uma bomba e perdeu o jogo
+            }
         }else{
-            resultado = 0; // jogador achou uma bomba e perdeu o jogo
+            resultado = -1; // jogador repetiu uma jogada
         }
-    }else{
-        resultado = -1; // -1 indica que o usuário fez a mesma jogada mais de uma vez
     }
+    else{
+        resultado = -1;
+    }
+
+    // -1 indica que a jogada foi invalidada
 
     return resultado;
 }
 
-void inicioJogo(int** campoJogo, int** campoResposta, int** coordenadasResposta, int tamCampo, int qtdBombas){
-    int qtdJogadas = tamCampo*tamCampo - qtdBombas, bombaExplodiu = 0;
+void inicioJogo(int **campoJogo, int **campoResposta, int **coordenadasResposta, int tamCampo, int qtdBombas){
+    int qtdJogadas = tamCampo * tamCampo - qtdBombas, bombaExplodiu = 0;
 
     gerarPosicaoBombas(coordenadasResposta, qtdBombas, tamCampo);
 
     preencheMatrizJogo(campoJogo, tamCampo);
     preencheMatrizResposta(campoResposta, coordenadasResposta, tamCampo, qtdBombas);
 
-    while(qtdJogadas > 0 && !bombaExplodiu){
+    while (qtdJogadas > 0 && !bombaExplodiu){
         int x, y;
+        printf("\nDigite uma coordenada: \n");
         scanf("%d,%d", &x, &y);
+        // colocar as coordenadas digitadas para as equivalentes em C
+        x--;
+        y--;
 
-        int jogada = verificaJogada(campoJogo, campoResposta, x, y);
+        int jogada = verificaJogada(campoJogo, campoResposta, x, y, tamCampo);
 
-        if(jogada != -1){
-            if(jogada){
+        if (jogada != -1){
+            if (jogada){
                 imprimeMatriz(campoJogo, tamCampo, 1);
                 qtdJogadas--;
-            }else{
+            }
+            else{
                 bombaExplodiu = 1;
             }
+        }else{
+            printf("JOGADA INVALIDADA! Essa coordenada ja foi digitada ou uma coordenada invalida foi passada.\n");
         }
     }
 
-    if(!bombaExplodiu){
-        printf("parabens, vc eh fera\n");
-        imprimeMatriz(campoResposta, tamCampo, 0);
-    }else{
-        printf("game over\n");
-        imprimeMatriz(campoResposta, tamCampo, 0);
+    if (!bombaExplodiu){
+        printf("\nparabens, vc eh fera\n\n");
     }
+    else{
+        printf("\ngame over\n\n");
+    }
+
+    imprimeMatriz(campoResposta, tamCampo, 0);
 }
 
 int main(void){
@@ -220,7 +264,7 @@ int main(void){
     char *dificuldade = malloc(6 * sizeof(char));
     int **campoJogo, **campoResposta, **coordenadasResposta, tamCampo, qtdBombas;
 
-    printf("Digite a dificuldade:\nfacil\nmedio\ndificil\n");
+    printf("Digite a dificuldade:\nfacil\nmedio\ndificil\n\n- ");
     scanf("%s", dificuldade);
 
     tamCampo = defineTamCampo(dificuldade);
