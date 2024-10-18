@@ -90,9 +90,10 @@ int defineTamCampo(char *dificuldade){
 }
 
 void gerarPosicaoBombas(int **mat, int qtdBombas, int tam){ // gera coordenadas aleatórias para as bombas
-    int x, y, contBombasGeradas = 0, flagCoordenadaRepetida = 0;
+    int x, y, contBombasGeradas = 0;
 
     while (contBombasGeradas < qtdBombas){
+        int flagCoordenadaRepetida = 0;
         x = rand() % tam;
         y = rand() % tam;
 
