@@ -94,10 +94,12 @@ void gerarPosicaoBombas(int **mat, int qtdBombas, int tam){ // gera coordenadas 
 
     while (contBombasGeradas < qtdBombas){
         int flagCoordenadaRepetida = 0;
+        // % tam para gerar coordenadas dentro do intervalo [0, tam[
         x = rand() % tam;
         y = rand() % tam;
 
-        if (!contBombasGeradas){ // verificação se a coordenada gerada é igual à alguma coordenada já armazenada
+        // verificação se a coordenada gerada é igual à alguma coordenada já armazenada
+        if (!contBombasGeradas){ // verifica sé é a primeira coordenda gerada
             mat[contBombasGeradas][0] = x;
             mat[contBombasGeradas][1] = y;
             contBombasGeradas++;
@@ -118,8 +120,8 @@ void gerarPosicaoBombas(int **mat, int qtdBombas, int tam){ // gera coordenadas 
     }
 }
 
-int verificaQuantidadeBombas(int **mat, int x, int y, int tam){ // verifica quantas bombas há ao redor do elemento, começando da diagonal superior esquerda e seguindo no sentido horário
-    int contBombas = 0;
+int verificaQuantidadeBombas(int **mat, int x, int y, int tam){ // verifica quantas bombas há ao redor do elemento, começando da diagonal superior esquerda e
+    int contBombas = 0;                                        // seguindo no sentido horário
 
     if (x - 1 >= 0 && y - 1 >= 0){
         if (mat[x - 1][y - 1] == -1){
@@ -211,7 +213,7 @@ int verificaJogada(int **jogo, int **resposta, int x, int y, int tam){
         }
     }
     else{
-        resultado = -1;
+        resultado = -1; // coordenada não existe
     }
 
     // -1 indica que a jogada foi invalidada
@@ -231,7 +233,7 @@ void inicioJogo(int **campoJogo, int **campoResposta, int **coordenadasResposta,
         int x, y;
         printf("\nDigite uma coordenada: \n");
         scanf("%d,%d", &x, &y);
-        // colocar as coordenadas digitadas para as equivalentes em C
+        // colocar as coordenadas digitadas para as equivalentes em C, Ex: se o usuário digita "1,1", vira 0,0
         x--;
         y--;
 
