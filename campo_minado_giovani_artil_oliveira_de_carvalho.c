@@ -262,7 +262,7 @@ void inicioJogo(int **campoJogo, int **campoResposta, int **coordenadasResposta,
 
 int main(void){
     srand((unsigned int)time(NULL)); // seed do gerador aleatório, baseado no tempo
-    char *dificuldade = malloc(6 * sizeof(char));
+    char *dificuldade = malloc(8 * sizeof(char));
     int **campoJogo, **campoResposta, **coordenadasResposta, tamCampo, qtdBombas;
 
     printf("Digite a dificuldade:\nfacil\nmedio\ndificil\n\n- ");
