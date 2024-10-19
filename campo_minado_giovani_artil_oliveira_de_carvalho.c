@@ -99,7 +99,7 @@ void gerarPosicaoBombas(int **mat, int qtdBombas, int tam){ // gera coordenadas 
         y = rand() % tam;
 
         // verificação se a coordenada gerada é igual à alguma coordenada já armazenada
-        if (!contBombasGeradas){ // verifica sé é a primeira coordenda gerada
+        if (!contBombasGeradas){ // verifica se é a primeira coordenda gerada
             mat[contBombasGeradas][0] = x;
             mat[contBombasGeradas][1] = y;
             contBombasGeradas++;
